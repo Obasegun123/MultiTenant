@@ -7,6 +7,7 @@ namespace MultiTenant.Service
     {
         private readonly TenantDbContext _context;
         public string? TenantId { get; set; }
+        public string? ConnectionString { get; set; }
 
         public CurrentTenantService(TenantDbContext context)
         {

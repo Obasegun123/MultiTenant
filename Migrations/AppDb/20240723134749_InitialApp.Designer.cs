@@ -8,11 +8,11 @@ using MultiTenant.Model;
 
 #nullable disable
 
-namespace MultiTenant.Migrations
+namespace MultiTenant.Migrations.AppDb
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20240722082159_InitialCreate")]
-    partial class InitialCreate
+    [Migration("20240723134749_InitialApp")]
+    partial class InitialApp
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -46,20 +46,6 @@ namespace MultiTenant.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Products");
-                });
-
-            modelBuilder.Entity("MultiTenant.Model.Tenant", b =>
-                {
-                    b.Property<string>("Id")
-                        .HasColumnType("nvarchar(450)");
-
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("Tenants");
                 });
 #pragma warning restore 612, 618
         }
