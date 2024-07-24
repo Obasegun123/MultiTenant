@@ -24,9 +24,9 @@ namespace MultiTenant.Service.TenantService
             if (request.Isolated == true)
             {
                 // generate a connection string for new tenant database
-                string dbName = "multiTenantAppDb-" + request.Id;
+                string dbName = "MultiTenantDB-" + request.Id;
                 string defaultConnectionString = _configuration.GetConnectionString("DefaultConnection");
-                newConnectionString = defaultConnectionString.Replace("multiTenantAppDb", dbName);
+                newConnectionString = defaultConnectionString.Replace("MultiTenantDB", dbName);
 
                 // create a new tenant database and bring current with any pending migrations from ApplicationDbContext
                 try

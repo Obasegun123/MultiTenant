@@ -3,28 +3,32 @@ using MultiTenant.Service;
 
 namespace MultiTenant.Model
 {
-    public class ApplicationDbContext:DbContext
+    public class ApplicationDbContext : DbContext
     {
         private readonly ICurrentTenantService _currentTenantService;
         public string CurrentTenantId { get; set; }
         public string CurrentTenantConnectionString { get; set; }
+
+
+        // Constructor 
         public ApplicationDbContext(ICurrentTenantService currentTenantService, DbContextOptions<ApplicationDbContext> options) : base(options)
         {
             _currentTenantService = currentTenantService;
             CurrentTenantId = _currentTenantService.TenantId;
             CurrentTenantConnectionString = _currentTenantService.ConnectionString;
+
         }
 
+        // Application DbSets -- create for entity types to be applied to all databases
         public DbSet<Product> Products { get; set; }
 
-        //public DbSet<Tenant> Tenants { get; set; }
-
-        // On Model Creating - multitenancy query filters 
+        // On Model Creating - multitenancy query filter, fires once on app start
         protected override void OnModelCreating(ModelBuilder builder)
         {
             builder.Entity<Product>().HasQueryFilter(a => a.TenantId == CurrentTenantId);
         }
 
+        // On Configuring -- dynamic connection string, fires on every request
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
             string tenantConnectionString = CurrentTenantConnectionString;
@@ -34,8 +38,8 @@ namespace MultiTenant.Model
             }
         }
 
-        // On Save Changes - write tenant Id to table
 
+        // On Save Changes - write tenant Id to table
         public override int SaveChanges()
         {
             foreach (var entry in ChangeTracker.Entries<IMustHaveTenant>().ToList())
@@ -51,5 +55,7 @@ namespace MultiTenant.Model
             var result = base.SaveChanges();
             return result;
         }
+
     }
+
 }

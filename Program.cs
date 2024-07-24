@@ -18,16 +18,16 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
 
+// adding our own service -- CRUD services should be registered with transient lifetimes
+builder.Services.AddScoped<ICurrentTenantService, CurrentTenantService>();
+
 
 // adding a database service with configuration -- connection string read from appsettings.json
 builder.Services.AddDbContext<ApplicationDbContext>(options => options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
 builder.Services.AddDbContext<TenantDbContext>(options => options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
 builder.Services.AddAndMigrateTenantDatabases(builder.Configuration);
 
-// adding our own service -- CRUD services should be registered with transient lifetimes
-
 // Current tenant service with scoped lifetime (created per each request)
-builder.Services.AddScoped<ICurrentTenantService, CurrentTenantService>();
 builder.Services.AddTransient<ITenantService, TenantService>();
 
 builder.Services.AddTransient<IProductService, ProductService>();

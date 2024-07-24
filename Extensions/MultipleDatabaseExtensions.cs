@@ -31,7 +31,7 @@ namespace MultiTenant.Extensions
 
                 // Application Db Context (app - per tenant)
                 using IServiceScope scopeApplication = services.BuildServiceProvider().CreateScope();
-                ApplicationDbContext dbContext = scopeApplication.ServiceProvider.GetRequiredService<ApplicationDbContext>();
+             ApplicationDbContext dbContext = scopeApplication.ServiceProvider.GetRequiredService<ApplicationDbContext>();
                 dbContext.Database.SetConnectionString(connectionString);
                 if (dbContext.Database.GetPendingMigrations().Any())
                 {
